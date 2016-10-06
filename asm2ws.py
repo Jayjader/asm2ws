@@ -2,14 +2,23 @@
 
 import sys
 
-# commands
-'''
-cmds_stack = ('push', 'duplicate', 'swap', 'discard')
-cmds_arith = ('add', 'sub', 'multiply', 'divide', 'mod')
-cmds_heap = ('store', 'retrieve')
-cmds_flow = ('label', 'call', 'jump', 'jumpz', 'jumpn', 'endcall', 'endprog')
-cmds_io = ('writec', 'writen', 'readc', 'readn')
-'''
+
+# number -> Whitespace
+def number(n):
+    assert (type(n)==int), n
+    return str(int(n<0)) + format(abs(n), 2)
+
+# label -> Whitespace
+def label(l):
+    assert (set(l) == {'0', '1'}), l
+    characters = {'0' : ' ', '1' : '\t'}
+    word = ''
+    for c in l:
+        word += characters[c]
+    return word
+
+
+# Instruction Modification Parameters
 imps = {
         'stack' :       ' ',
         'arithmetic' :  '\t ',
@@ -17,6 +26,7 @@ imps = {
         'flow'       :  '\n',
         'io'         :  '\t\n',
         }
+# Commands
 commands = {
         'push'      :   {'cmd' : ' ',     'imp' : 'stack'},
         'duplicate' :   {'cmd' : '\n ',   'imp' : 'stack'},
@@ -46,29 +56,37 @@ commands = {
         'readn'     :   {'cmd' : '\t\t',  'imp' : 'io'},
         }
 
-asm_file = open(sys.argv[1], 'r')
-asm = asm_file.read()
-# Decode to unicode and split into words
-asm = asm.decode().split()
+if __name__ == '__main__':
+    asm_file = open(sys.argv[1], 'r')
+    asm = asm_file.read()
+    # Decode to unicode and split into words
+    asm = asm.decode().split()
 
-ws = ''
-line = 0
+    ws = ''
+    line = 0
 
-while len(asm) > 0:
-    word = asm.pop(0)
-    line += 1
-    # Parse for Instruction Modification Parameter (IMP), then Command,
-    # then (if relevant) Parameter
-    try:
-        command = commands[word]
-        ws += imps[command]
-        ws += command['cmd']
+    while len(asm) > 0:
+        word = asm.pop(0)
+        line += 1
+        # Parse for IMP, then Command, then (if relevant) Parameter
+        try:
+            command = commands[word]
+            ws += imps[command]
+            ws += command['cmd']
 
-        if word == 'push':
-            pass
-    except KeyError:
-        print('Error! {0} is not a valid command (line {1})'.format([word, line]))
-        sys.exit(1)
+            # Push has a number parameter
+            if word == 'push':
+                word = asm.pop(0)
+                ws += number(word)
+            # Commands that require a label parameter
+            elif imps[command] == 'flow' and word[:3] != 'end':
+                word = asm.pop(0)
+                ws += label(word)
 
 
-ws_file = open(sys.argv[1][:-6], 'wb')
+        except KeyError:
+            print('Error! {0} is not a valid command (line {1})'.format([word, line]))
+            sys.exit(1)
+
+
+    ws_file = open(sys.argv[1][:-6], 'wb')
