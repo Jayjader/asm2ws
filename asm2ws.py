@@ -5,8 +5,8 @@ import sys
 
 # number -> Whitespace
 def number(n):
-    assert (type(n)==int), n
-    return str(int(n<0)) + format(abs(n), 2)
+    n = int(n)
+    return str(int(n<0)) + format(abs(n), 'b')
 
 # label -> Whitespace
 def label(l):
@@ -71,7 +71,7 @@ if __name__ == '__main__':
         # Parse for IMP, then Command, then (if relevant) Parameter
         try:
             command = commands[word]
-            ws += imps[command]
+            ws += imps[command['imp']]
             ws += command['cmd']
 
             # Push has a number parameter
@@ -84,8 +84,13 @@ if __name__ == '__main__':
                 ws += label(word)
 
 
+        except ValueError:
+            print('Error! {0} is not a valid number (line {1})'.format([word,
+                line]))
+            sys.exit(1)
         except KeyError:
-            print('Error! {0} is not a valid command (line {1})'.format([word, line]))
+            print('Error! {0} is not a valid command (line {1})'.format([word,
+                line]))
             sys.exit(1)
 
 
