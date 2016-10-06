@@ -59,8 +59,8 @@ commands = {
 if __name__ == '__main__':
     asm_file = open(sys.argv[1], 'r')
     asm = asm_file.read()
-    # Decode to unicode and split into words
-    asm = asm.decode().split()
+    # Split into words
+    asm = asm.split()
 
     ws = ''
     line = 0
@@ -89,4 +89,7 @@ if __name__ == '__main__':
             sys.exit(1)
 
 
-    ws_file = open(sys.argv[1][:-6], 'wb')
+    # Write Whitespace code to file
+    ws_file = open(sys.argv[1][:-5] + 'ws', 'wb')
+    ws_file.write(ws.encode())
+    ws_file.close()
