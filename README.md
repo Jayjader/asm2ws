@@ -1,6 +1,5 @@
 # asm2ws
-A python3 cross compiler from (a custom version of) ASM file to
-Whitespace.
+A python3 cross compiler from (a custom version of) ASM to Whitespace.
 
 This script interprets a pseudo-ASM, or ASM-like language I made to represent
 commands in the [WhiteSpace](http://compsoc.dur.ac.uk/whitespace/tutorial.html) language.
