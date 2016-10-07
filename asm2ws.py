@@ -2,21 +2,25 @@
 
 import sys
 
+# Characters for numbers and labels
+characters = {'0' : ' ', '1' : '\t'}
 
 # number -> Whitespace
 def number(n):
     n = int(n)
-    return str(int(n<0)) + format(abs(n), 'b')
+    code = str(int(n<0)) + format(abs(n), 'b')
+    word = ''
+    for c in code:
+        word += characters[c]
+    return word
 
 # label -> Whitespace
 def label(l):
     assert (set(l) == {'0', '1'}), l
-    characters = {'0' : ' ', '1' : '\t'}
     word = ''
     for c in l:
         word += characters[c]
     return word
-
 
 # Instruction Modification Parameters
 imps = {
@@ -56,6 +60,13 @@ commands = {
         'readn'     :   {'cmd' : '\t\t',  'imp' : 'io'},
         }
 
+# command -> Whitespace
+def command(cmd):
+    # Parse for IMP and Command
+    cmd = commands[word]
+    return imps[cmd['imp']] + cmd['cmd']
+
+
 if __name__ == '__main__':
     asm_file = open(sys.argv[1], 'r')
     asm = asm_file.read()
@@ -65,32 +76,28 @@ if __name__ == '__main__':
     ws = ''
     line = 0
 
+    # Parse one by one
     while len(asm) > 0:
         word = asm.pop(0)
         line += 1
-        # Parse for IMP, then Command, then (if relevant) Parameter
         try:
-            command = commands[word]
-            ws += imps[command['imp']]
-            ws += command['cmd']
+            # Translate command 
+            ws += command(word)
 
             # Push has a number parameter
             if word == 'push':
                 word = asm.pop(0)
-                ws += number(word)
+                ws += number(word) + '\n'
             # Commands that require a label parameter
-            elif imps[command] == 'flow' and word[:3] != 'end':
+            elif commands[word]['imp'] == 'flow' and word[:3] != 'end':
                 word = asm.pop(0)
-                ws += label(word)
-
+                ws += label(word) + '\n'
 
         except ValueError:
-            print('Error! {0} is not a valid number (line {1})'.format([word,
-                line]))
+            print('Error! {0} is not a valid number (line {1})'.format(word, line))
             sys.exit(1)
         except KeyError:
-            print('Error! {0} is not a valid command (line {1})'.format([word,
-                line]))
+            print('Error! {0} is not a valid command (line {1})'.format(word, line))
             sys.exit(1)
 
 
