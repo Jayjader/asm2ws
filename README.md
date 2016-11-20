@@ -19,11 +19,12 @@ easily write the kind of program I wanted. The language is surprisingly easy to
 grasp! Unfortunately, writing with spaces, tabs and newlines makes it difficult
 to keep all the commands available to you in your head at once, which would
 severely slow me down (not to metion render the process unpleasant). I figured
-an assembly-like language fit 1-to-1 with Whitespace's commands. I figured I'd
-upload the code and share it in case anyone else ever wants to write a quick
-Whitespace program (for whatever reason) and like me couldn't find much reading
-to be had on the language (i.e. I couldn't find any tutorials online apart from
-the very basic one at the bottom of the page above).  Sidenote:
-tutorialspoint's online IDE can parse Whitespace, rendering it much more
-lisible, and the default file is a Hello World, giving a tutorial on printing
-strings.
+an assembly-like language fit 1-to-1 with Whitespace's commands. I also figured
+I'd upload the code and share it in case anyone else ever wants to write a
+quick Whitespace program (for whatever reason) and like me couldn't find much
+reading to be had on the language (i.e. I couldn't find any tutorials online
+apart from the very basic one at the bottom of the page above).
+
+Sidenote: tutorialspoint's online IDE can parse Whitespace, rendering it much
+more lisible, and the default file is a Hello World, giving a tutorial on
+printing strings.
